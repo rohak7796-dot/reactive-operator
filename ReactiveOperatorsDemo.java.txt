@@ -1,0 +1,52 @@
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+public class ReactiveOperatorsDemo {
+    public static void main(String[] args) {
+
+        // 1️⃣ MAP Operator
+        System.out.println("=== MAP Operator ===");
+        Flux<Integer> numbers = Flux.just(1, 2, 3, 4, 5);
+        numbers.map(n -> n * 2)
+                .subscribe(n -> System.out.println("Mapped value: " + n));
+
+        // 2️⃣ FILTER Operator
+        System.out.println("\n=== FILTER Operator ===");
+        Flux<Integer> filtered = Flux.just(1, 2, 3, 4, 5)
+                .filter(n -> n % 2 == 0);
+        filtered.subscribe(n -> System.out.println("Even number: " + n));
+
+        // 3️⃣ FLATMAP Operator
+        System.out.println("\n=== FLATMAP Operator ===");
+        Flux<String> names = Flux.just("John", "Jane");
+        names.flatMap(name -> Flux.fromArray(name.split("")))
+                .subscribe(ch -> System.out.println("Character: " + ch));
+
+        // 4️⃣ REDUCE Operator
+        System.out.println("\n=== REDUCE Operator ===");
+        Mono<Integer> sum = Flux.just(1, 2, 3, 4, 5)
+                .reduce((a, b) -> a + b);
+        sum.subscribe(result -> System.out.println("Sum: " + result));
+
+        // 5️⃣ MERGE Operator
+        System.out.println("\n=== MERGE Operator ===");
+        Flux<String> stream1 = Flux.just("A", "B", "C");
+        Flux<String> stream2 = Flux.just("1", "2", "3");
+        Flux.merge(stream1, stream2)
+                .subscribe(val -> System.out.println("Merged: " + val));
+
+        // 6️⃣ ZIP Operator
+        System.out.println("\n=== ZIP Operator ===");
+        Flux<String> flux1 = Flux.just("Red", "Green", "Blue");
+        Flux<String> flux2 = Flux.just("Apple", "Leaf", "Sky");
+        Flux.zip(flux1, flux2, (color, object) -> color + " -> " + object)
+                .subscribe(System.out::println);
+
+        // 7️⃣ CONCAT Operator
+        System.out.println("\n=== CONCAT Operator ===");
+        Flux<String> part1 = Flux.just("Hello", "Reactive");
+        Flux<String> part2 = Flux.just("World", "Stream");
+        Flux.concat(part1, part2)
+                .subscribe(val -> System.out.println("Concat: " + val));
+    }
+}
